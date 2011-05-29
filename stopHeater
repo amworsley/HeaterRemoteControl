@@ -1,0 +1,8 @@
+#! /bin/sh
+MAILTO="amworsley@gmail.com"
+/usr/local/bin/heaterOff
+sleep 2
+/usr/local/bin/heaterOff
+sleep 2
+/usr/local/bin/heaterOff
+logger -t Heater stopped

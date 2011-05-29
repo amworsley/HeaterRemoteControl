@@ -1,0 +1,8 @@
+#! /bin/sh
+MAILTO="amworsley@gmail.com"
+/usr/local/bin/heaterOn
+sleep 2
+/usr/local/bin/heaterOn
+sleep 2
+/usr/local/bin/heaterOn
+logger -t Heater started 

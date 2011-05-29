@@ -1,0 +1,8 @@
+#! /bin/sh
+# Simple heater daemon
+# Arduino input
+AF=/dev/ttyACM0
+ALF=/home/amw/remote-control.log
+stty < $AF 38400
+sleep 1
+dd bs=1b < $AF > $ALF
