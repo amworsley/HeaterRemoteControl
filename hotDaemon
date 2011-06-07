@@ -3,6 +3,7 @@
 # Arduino input
 AF=/dev/ttyACM0
 ALF=/home/amw/remote-control.log
-stty < $AF 38400
+stty -F $AF 38400 -echo raw
 sleep 1
-dd bs=1b < $AF > $ALF
+#dd bs=1b < $AF > $ALF
+cat < $AF > $ALF
