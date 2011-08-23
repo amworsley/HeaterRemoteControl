@@ -7,21 +7,31 @@ import sys
 line = serial.Serial('/dev/ttyACM0', 38400)
 line.open()
 line.flushInput()
-def CheckArduino() :
-    time.sleep(.1)
-    while line.inWaiting() > 0:
-	x = line.readline()
-	x = x.rstrip('\n\r')
-	print(x)
+
+logFile = "log.txt"
+log = open(logFile, 'a', 0);
+def CheckInput(line) :
+    if line.inWaiting() <= 0:
+	return ""
+    x = line.readline()
+    x = x.rstrip('\n\r')
+    return x
 
 
 def CheckStdIn():
-    time.sleep(.1)
+    if sys.stdin.inWaiting() <= 0:
+	return None
     i = sys.stdin.readline()
     i = i[0]
     if i == 't':
 	line.write('t')
     	
 while 1:
-    CheckArduino()
-    #CheckStdIn()
+    time.sleep(.1)
+    x = CheckInput(line)
+    if len(x) > 1:
+	log.write(x + "\n")
+#    x = CheckInput(sys.stdin)
+#    if len(x) > 1:
+#	log.write(x + "\n")
+#	line.write(x)
