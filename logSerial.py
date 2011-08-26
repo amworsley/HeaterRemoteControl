@@ -4,12 +4,15 @@ import serial
 import time
 import sys
 
-line = serial.Serial('/dev/ttyACM0', 38400)
+dfile = '/dev/ttyACM0'
+line = serial.Serial(dfile, 38400)
 line.open()
 line.flushInput()
 
-logFile = "log.txt"
+logFile = "/home/amw/log.txt"
 log = open(logFile, 'a', 0);
+
+timeout = 5 # timeout in seconds when we poll the temperature
 def CheckInput(line) :
     if line.inWaiting() <= 0:
 	return ""
@@ -26,12 +29,15 @@ def CheckStdIn():
     if i == 't':
 	line.write('t')
     	
-while 1:
-    time.sleep(.1)
-    x = CheckInput(line)
-    if len(x) > 1:
-	log.write(x + "\n")
-#    x = CheckInput(sys.stdin)
-#    if len(x) > 1:
-#	log.write(x + "\n")
-#	line.write(x)
+if __name__ == "__main__":
+    print("logging output from '" + dfile + "' to log file: " + logFile + "\n")
+    while 1:
+	time.sleep(.1)
+	a, b, c = select.select([line], [], [], timeout)
+	if line in a:
+	    x = CheckInput(line)
+	    log.write(x + ":"
+		+ time.ctime(time.time()) + "\n")
+	    print("got '" + x + "'")
+	else:
+	    line.write('t')
