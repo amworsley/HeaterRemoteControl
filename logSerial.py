@@ -8,7 +8,7 @@ line = serial.Serial('/dev/ttyACM0', 38400)
 line.open()
 line.flushInput()
 
-logFile = "log.txt"
+logFile = "/home/amw/remote-control.log"
 log = open(logFile, 'a', 0);
 def CheckInput(line) :
     if line.inWaiting() <= 0:
