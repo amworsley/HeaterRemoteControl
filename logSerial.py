@@ -13,7 +13,7 @@ line = serial.Serial(dfile, 38400)
 line.open()
 line.flushInput()
 
-logFile = "/home/amw/log.txt"
+logFile = "/home/amw/remote-control.log"
 log = open(logFile, 'a', 0);
 
 timeout = 5 # timeout in seconds when we poll the temperature
