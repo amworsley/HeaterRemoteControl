@@ -1,0 +1,4 @@
+# Define Variables
+[Setting]
+dfile = /dev/ttyACM0
+logFile = /home/amw/remote-control.log
