@@ -11,7 +11,7 @@ import ConfigParser
 verbose = False
 dfile = '/dev/ttyACM0'
 logFile = "/home/amw/remote-control.log"
-timeout = 5 # timeout in seconds when we poll the temperature
+timeout = 30 # timeout in seconds when we poll the temperature
 
 def CheckInput(line) :
     if line.inWaiting() <= 0:
