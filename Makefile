@@ -1,5 +1,6 @@
-DAEMON := hotDaemon
-CMDS := heaterOn heaterOff getTemp
+DAEMON := logSerial.py
+CMDS := heaterOn heaterOff getTemp heaterActivate \
+    heaterDeActivate heaterDecr heaterDump heaterIncr
 
 # Daemon directory
 DDIR := /usr/local/sbin
