@@ -1,0 +1,77 @@
+#! /bin/sh
+
+### BEGIN INIT INFO
+# Provides:		sshd
+# Required-Start:	$remote_fs $syslog
+# Required-Stop:	$remote_fs $syslog
+# Default-Start:	2 3 4 5
+# Default-Stop:		
+# Short-Description:	Start / Stop Remote Control Daemon
+### END INIT INFO
+
+set -e
+
+HEATERDIR=/usr/local/sbin
+HEATERN=logSerial.py
+HEATERD=$HEATERDIR/$HEATERN
+
+test -x $HEATERD || exit 0
+
+umask 022
+
+if test -f /etc/default/heaterd; then
+    . /etc/default/heaterd
+fi
+
+. /lib/lsb/init-functions
+
+# Are we running from init?
+run_by_init() {
+    ([ "$previous" ] && [ "$runlevel" ]) || [ "$runlevel" = S ]
+}
+
+#check_privsep_dir() {
+#    # Create the PrivSep empty dir if necessary
+#    if [ ! -d /var/run/sshd ]; then
+#	mkdir /var/run/sshd
+#	chmod 0755 /var/run/sshd
+#    fi
+#}
+
+#check_config() {
+#    if [ ! -e /etc/ssh/sshd_not_to_be_run ]; then
+#	/usr/sbin/sshd $HEATERDD_OPTS -t || exit 1
+#    fi
+#}
+
+#export PATH="${PATH:+$PATH:}/usr/sbin:/sbin"
+
+case "$1" in
+  start)
+	log_daemon_msg "Starting heaterd server" "heaterd"
+	if start-stop-daemon --start --exec $HEATERD -- $HEATERDD_OPTS; then
+	    log_end_msg 0
+	else
+	    log_end_msg 1
+	fi
+	;;
+  stop)
+	log_daemon_msg "Stopping heaterd server" "heaterd"
+	if start-stop-daemon --stop --name $HEATERN; then
+	    log_end_msg 0
+	else
+	    log_end_msg 1
+	fi
+	;;
+
+
+  status)
+	status_of_proc -p /var/run/heaterd.pid $HEATERD heaterd && exit 0 || exit $?
+	;;
+
+  *)
+	log_action_msg "Usage: /etc/init.d/rc-heater {start|stop|restart|status}"
+	exit 1
+esac
+
+exit 0
