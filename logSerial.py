@@ -1,5 +1,7 @@
 #! /usr/bin/python
 
+from daemonize import daemonize
+
 import serial
 import time
 import sys
@@ -84,4 +86,5 @@ def main():
 	    line.write('t')
 
 if __name__ == "__main__":
+	daemonize(stdout='/var/log/heaterd.log')
 	main()
