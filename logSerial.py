@@ -51,7 +51,7 @@ def ReadConfig(file):
     return config
 
 def init(c):
-    global dfile, logFile, timeout, elogfile, baudRate
+    global dfile, logFile, timeout, elogFile, baudRate
     if 'dfile' in c:
 	dfile = c['dfile']
     if 'logfile' in c:
@@ -59,7 +59,7 @@ def init(c):
     if 'timeout' in c:
 	timeout = c['timeout']
     if 'elogfile' in c:
-	elogfile = c['elogfile']
+	elogFile = c['elogfile']
     if 'baudrate' in c:
 	baudRate = c['baudrate']
 
@@ -85,10 +85,10 @@ def main():
 	    + " config='" + str(options.config) + "' dump=" + str(options.dump))
 	print(" dfile='" + str(dfile) + "' logFile='" + str(logFile)
 	    + "' timeout=" + str(timeout));
-	print(" elogfile='" + str(elogfile) + "' baudRate='" + str(baudRate))
+	print(" elogFile='" + str(elogFile) + "' baudRate='" + str(baudRate))
 	exit(0)
 
-    daemonize(stdout=elogfile)
+    daemonize(stdout=elogFile)
 
     line = serial.Serial(dfile, baudRate)
     line.open()
