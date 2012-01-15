@@ -12,8 +12,11 @@ import ConfigParser
 
 verbose = False
 dfile = '/dev/ttyACM0'
-logFile = "/home/amw/remote-control.log"
+logFile = "/var/log/remote-control.log"
+elogFile = "/var/log/heaterd.log" # daemon's standard output 
+configFile="/etc/remote-control"
 timeout = 30 # timeout in seconds when we poll the temperature
+baudRate = 38400
 
 def CheckInput(line) :
     if line.inWaiting() <= 0:
@@ -33,9 +36,9 @@ def CheckStdIn():
 
 def ReadConfig(file):
     config = {}
-    Config = ConfigParser.ConfigParser()
     if not os.access(file, os.R_OK):
     	return config
+    Config = ConfigParser.ConfigParser()
     Config.read(file)
     sections = Config.sections()
     for section in sections:
@@ -48,20 +51,26 @@ def ReadConfig(file):
     return config
 
 def init(c):
-    global dfile, logFile, timeout
+    global dfile, logFile, timeout, elogfile, baudRate
     if 'dfile' in c:
 	dfile = c['dfile']
-    if 'logFile' in c:
-	logFile = c['logFile']
+    if 'logfile' in c:
+	logFile = c['logfile']
     if 'timeout' in c:
 	timeout = c['timeout']
+    if 'elogfile' in c:
+	elogfile = c['elogfile']
+    if 'baudrate' in c:
+	baudRate = c['baudrate']
 
 def main():
     p = optparse.OptionParser()
     p.add_option("--verbose", "-v", action="store_true",help="enable debugging",
          default=False)
-    p.add_option("--config", "-c", action="store_true",help="config file",
-         default=".logSerial")
+    p.add_option("--config", "-c", action="store",help="config file", type='string',
+         default=configFile)
+    p.add_option("--dump", "-d", action="store_true",help="dump settings",
+         default=False)
     options, args = p.parse_args()
     if options.verbose:
 	global verbose
@@ -70,7 +79,18 @@ def main():
 
     init(ReadConfig(options.config))
 
-    line = serial.Serial(dfile, 38400)
+    if options.dump:
+	print("dumping settings:");
+	print(" verbose=" + str(options.verbose)
+	    + " config='" + str(options.config) + "' dump=" + str(options.dump))
+	print(" dfile='" + str(dfile) + "' logFile='" + str(logFile)
+	    + "' timeout=" + str(timeout));
+	print(" elogfile='" + str(elogfile) + "' baudRate='" + str(baudRate))
+	exit(0)
+
+    daemonize(stdout=elogfile)
+
+    line = serial.Serial(dfile, baudRate)
     line.open()
     line.flushInput()
     log = open(logFile, 'a', 0);
@@ -86,5 +106,4 @@ def main():
 	    line.write('t')
 
 if __name__ == "__main__":
-	daemonize(stdout='/var/log/heaterd.log')
 	main()
