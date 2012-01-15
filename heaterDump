@@ -1,7 +1,10 @@
 #! /bin/sh 
 # Arduino input
-AF=/dev/ttyACM0
-ALF=/home/amw/remote-control.log
+#AF=/dev/ttyACM0
+CF=/etc/remote-control.cfg
+AF=$(awk -F = '/dfile/ { print $2; }' < $CF)
+#ALF=/home/amw/remote-control.log
+ALF=$(awk -F = '/^logFile=/ { print $2; }' < $CF)
 echo -n "b" > $AF
 sleep .5
 tail -7 $ALF

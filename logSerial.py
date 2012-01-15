@@ -12,9 +12,9 @@ import ConfigParser
 
 verbose = False
 dfile = '/dev/ttyACM0'
-logFile = "/var/log/remote-control.log"
+logFile = "/var/log/remote-control"
 elogFile = "/var/log/heaterd.log" # daemon's standard output 
-configFile="/etc/remote-control"
+configFile="/etc/remote-control.cfg"
 timeout = 30 # timeout in seconds when we poll the temperature
 baudRate = 38400
 
@@ -57,7 +57,7 @@ def init(c):
     if 'logfile' in c:
 	logFile = c['logfile']
     if 'timeout' in c:
-	timeout = c['timeout']
+	timeout = float(c['timeout'])
     if 'elogfile' in c:
 	elogFile = c['elogfile']
     if 'baudrate' in c:
@@ -65,6 +65,8 @@ def init(c):
 
 def main():
     p = optparse.OptionParser()
+    p.add_option("--nodaemon", "-n", action="store_true",help="no daemon mode",
+         default=False)
     p.add_option("--verbose", "-v", action="store_true",help="enable debugging",
          default=False)
     p.add_option("--config", "-c", action="store",help="config file", type='string',
@@ -85,11 +87,14 @@ def main():
 	    + " config='" + str(options.config) + "' dump=" + str(options.dump))
 	print(" dfile='" + str(dfile) + "' logFile='" + str(logFile)
 	    + "' timeout=" + str(timeout));
-	print(" elogFile='" + str(elogFile) + "' baudRate='" + str(baudRate))
+	print(" elogFile='" + str(elogFile) + "' baudRate='" + str(baudRate) 
+	    + " nodaemon=" + str(options.nodaemon))
 	exit(0)
 
-    daemonize(stdout=elogFile)
+    if options.nodaemon == False:
+	daemonize(stdout=elogFile)
 
+    os.umask(022)
     line = serial.Serial(dfile, baudRate)
     line.open()
     line.flushInput()

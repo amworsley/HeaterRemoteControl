@@ -9,8 +9,11 @@ DDIR := /usr/local/sbin
 # Client Directory
 CDIR := /usr/local/bin
 
-# Mdule Directory
+# Module Directory
 MDIR := /usr/local/sbin
+
+# Configuration Directory
+EDIR := /etc
 
 install: 
 	cp $(CMDS) $(CDIR)
@@ -18,3 +21,4 @@ install:
 	cp $(MODULES) $(MDIR)
 	cp rc-heater /etc/init.d
 	update-rc.d rc-heater defaults
+	cp remote-control.cfg $(EDIR)
