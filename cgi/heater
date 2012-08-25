@@ -4,19 +4,30 @@ import sys
 sys.path.append("/usr/local/sbin")
 import logSerial
 
-print "Content-Type: text/plain"
+print "Content-Type: text/html"
 print
+print "<html><head><title>Heater Status</title></head>"
+print "<body>"
+print "<h1>Heater Status</h1>"
 
 logSerial.init(logSerial.ReadConfig(logSerial.configFile))
 log = open(logSerial.logFile, 'r');
 log.seek(-1024, 2)
 log.readline()
+print"<table>\n"
 while True:
     x = log.readline()
     if not x:
 	break
-    print x,
+    x = x.rstrip()
+    a = x.split(':', 1)
+    a.reverse()
+    print "<tr><td>", "</td><td>".join(a), "</td></tr>"
 
+print"</table>\n"
+
+print "</body>"
+print "</html>"
 
 # /usr/local/bin/heaterDump
 #! /bin/sh 
