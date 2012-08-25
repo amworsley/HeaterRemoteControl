@@ -3,6 +3,7 @@ import sys
 
 sys.path.append("/usr/local/sbin")
 import logSerial
+import time
 
 print "Content-Type: text/html"
 print
@@ -18,6 +19,10 @@ print"<table>\n"
 L = []
 PK = []
 param = {}
+cmdfile = open(logSerial.dfile, 'w')
+cmdfile.write('b')
+cmdfile.close()
+#time.sleep(.1)
 while True:
     x = log.readline()
     if not x:
