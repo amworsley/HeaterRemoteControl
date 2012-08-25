@@ -15,31 +15,34 @@ log = open(logSerial.logFile, 'r');
 log.seek(-1024, 2)
 log.readline()
 print"<table>\n"
+L = []
+PK = []
+param = {}
 while True:
     x = log.readline()
     if not x:
 	break
+    if 'Current Variables::' in x:
+	continue
     x = x.rstrip()
     a = x.split(':', 1)
     a.reverse()
-    print "<tr><td>", "</td><td>".join(a), "</td></tr>"
+    if '=' in a[1]:
+	vals = a[1].split('=')
+	if not param.has_key(vals[0]):
+	    PK.append(vals[0])
+	param[vals[0]] = vals[1]
+    else:
+	L.append("<tr><td>" + "</td><td>".join(a) + "</td></tr>")
 
+for k in PK:
+    print "<tr><td>" + k + "</td><td>" + param[k] + "</td></tr>"
+
+L.reverse()
+for l in L:
+    print l
 print"</table>\n"
 
 print "</body>"
 print "</html>"
-
-# /usr/local/bin/heaterDump
-#! /bin/sh 
-# Arduino input
-#AF=/dev/ttyACM0
-#CF='/etc/remote-control.cfg'
-#AF=$(awk -F = '/dfile/ { print $2; }' < $CF)
-#ALF=/home/amw/remote-control.log
-#ALF=$(awk -F = '/^logFile=/ { print $2; }' < $CF)
-#logFile=/var/log/remote-control
-#ALF='/var/log/remote-control'
-#echo -n "b" > $AF
-#sleep .5
-#tail -7 $ALF
 
