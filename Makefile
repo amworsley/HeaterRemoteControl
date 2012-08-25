@@ -15,6 +15,9 @@ MDIR := /usr/local/sbin
 # Configuration Directory
 EDIR := /etc
 
+# CGI script directory
+CGI_DIR := /usr/lib/cgi-bin
+
 install: 
 	cp $(CMDS) $(CDIR)
 	cp $(DAEMON) $(DDIR)
@@ -22,3 +25,6 @@ install:
 	cp rc-heater /etc/init.d
 	update-rc.d rc-heater defaults
 	cp remote-control.cfg $(EDIR)
+
+install-cgi:
+	cp cgi/heater $(CGI_DIR)/heater
