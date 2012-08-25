@@ -13,14 +13,13 @@ cgitb.enable()
 print "Content-Type: text/html"
 print
 print "<html><head><title>Heater Status</title></head>"
-print "<body>"
+print "<body bgcolor=bisque>"
 print "<h1>Heater Status</h1>"
 
 logSerial.init(logSerial.ReadConfig(logSerial.configFile))
 log = open(logSerial.logFile, 'r');
 log.seek(-2024, 2)
 log.readline()
-print"<table>\n"
 L = []
 PK = []
 param = {}
@@ -45,6 +44,18 @@ while True:
     else:
 	L.append("<tr><td>" + "</td><td>".join(a) + "</td></tr>")
 
+if param.has_key('active') and param.has_key('state'):
+    if param['state'] == '7':
+	print "<h2> Heater is ON </h2>"
+    elif param['active'] == '1':
+	print "<h2> Controller is Active but Heater is OFF  </h2>"
+    else:
+	print "<h2> Controller is Deactived and Heater is %s  </h2>" % ( "ON" if param['state'] == '7' else "OFF" )
+
+
+
+print"<table bgcolor=aquamarine>\n"
+print"<tr><th> Time </th><th> Temperature</th></tr>\n"
 for k in PK:
     print "<tr><td>" + k + "</td><td>" + param[k] + "</td></tr>"
 
