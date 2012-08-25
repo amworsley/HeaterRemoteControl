@@ -28,3 +28,7 @@ install:
 
 install-cgi:
 	cp cgi/heater $(CGI_DIR)/heater
+
+# Install experimental version
+install-cgi-exp:
+	cp cgi/heater $(CGI_DIR)/heater-exp
