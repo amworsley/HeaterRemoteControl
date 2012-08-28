@@ -1,0 +1,5 @@
+A basic set of python/shell scripts to control an Arduino controller heater.
+The heater control is just an cheap RF remote control  power switch on my heater and
+subject to Arduino control as describe in this really neat project
+
+    - http://www.practicalarduino.com/projects/appliance-remote-control
