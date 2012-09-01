@@ -46,6 +46,12 @@ float temp = 21.0;
 float set_temp = 21.0;
 
 #include <math.h>
+
+void updateState();
+void RemoteTemperature();
+void pulse(byte output, int pressTime);
+void RemoteControl(byte val);
+
 double 
 Thermister(int RawADC)
 {

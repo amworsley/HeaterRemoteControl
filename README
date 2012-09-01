@@ -3,3 +3,5 @@ The heater control is just an cheap RF remote control  power switch on my heater
 subject to Arduino control as describe in this really neat project
 
     - http://www.practicalarduino.com/projects/appliance-remote-control
+
+  o Requires debian python python-serial packages
