@@ -16,6 +16,31 @@
  * Copyright 2009 Jonathan Oxer <jon@oxer.com.au>
  * Copyright 2009 Hugh Blemings <hugh@blemings.org>
  * http://www.practicalarduino.com/projects/appliance-remote-control
+ *
+ * Extended to contol a heater and allow querying of it
+ *
+ * Commands are by u-controller on serial port are a single character - usually sent by a shell script are:
+ *
+ *   a = Activate Controller (controller only switches on/off heater when active (i.e. activated)
+ *   d = De-Activate Controller
+ *
+ *   b = Dump the current internal state of the Controller
+ *   t or T - Print the current temperature reading (read from Thyristor)
+ *   
+ *   1-8 = Single digit pulses that PIN, HEATER_ON is wired to On to HEATER_OFF to Off button
+ *
+ *   + = Increment the set temperature by H degrees
+ *   - = Decrement the set temperature by H degrees
+ * 
+ *   Every INTERVAL seconds it evaluates the temperature and when active switches ON/OFF the heater
+ *  based on whether the measured temperature is above / below the set temperatures. There is a
+ *  hysteresis H around the set temperature that is allowed before the controller will allow the
+ *  temperature to reach before switching the direction of control. e.g. Switches off the heater once
+ *  the temperature has risen above set temperature + H degrees or switch on once the temperature has
+ *  fallen below set temperature.
+ *   
+ *
+ * Copyright 2012 Andrew Worsley <amworsley@gmail.com>
  */
 
 // Use pins 5 through 12 as the digital outputs
@@ -37,6 +62,8 @@ unsigned long elapsed = 0; // time in milliseconds of last update
 
 #define HEATER_ON output3 /* pulse this to turn Heater On */
 #define HEATER_OFF output4 /* pulse this to turn Heater Off */
+
+#define BTN_REPEAT	3 /* no. of times to repeat button press for reliability */
 
 float H = .5; /* hysterias */
 int active = OFF; /* heater control state */
@@ -195,7 +222,7 @@ RemoteTemperature()
   Serial.println(" C");
 }
 void
-pulse(byte output, int pressTime)
+pressBtn(byte output, int pressTime)
 {
   Serial.print("Pin ");
   Serial.print(output - 5 + 1);
@@ -207,6 +234,18 @@ pulse(byte output, int pressTime)
 
   Serial.println("Off");
   state = output;
+}
+/*
+ * pulse the button repeated for reliability as we 
+ * have no sensor to detect the request has worked
+ * in the case of a radio remote control for example.
+ */
+void
+pulse(byte output, int pressTime)
+{
+    int cnt = 0;
+    while (cnt++ < BTN_REPEAT)
+    	pressBtn(output, pressTime);
 }
 void
 RemoteControl(byte val)
