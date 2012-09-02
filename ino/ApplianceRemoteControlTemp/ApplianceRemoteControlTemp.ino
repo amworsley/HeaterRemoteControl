@@ -142,7 +142,11 @@ void loop()
     RemoteTemperature();
     if (active == ON) {
       updateState();
-    }
+    } else if (state == HEATER_ON) {
+      Serial.println("Heater On while de-activated - switching off");
+      state = HEATER_OFF;
+      pulse(state, buttonPressTime);
+    } 
     //Serial.print("time=");
     //Serial.println(time);
   }
@@ -158,6 +162,7 @@ void loop()
     else if (val == 'd') {
       Serial.println("De-activating Controller");
       active = OFF;
+      state = HEATER_OFF;
       pulse(state, buttonPressTime);
     } 
     else if (val == '-') {
