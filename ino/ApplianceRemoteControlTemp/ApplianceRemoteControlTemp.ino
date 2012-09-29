@@ -169,22 +169,32 @@ void loop()
       Serial.println("Decrementing set point to ");
       set_temp -= H;
       Serial.println(set_temp);
+      updateState();
     } 
     else if (val == '+') {
       Serial.println("Incrementing Set point to ");
       set_temp += H;
       Serial.println(set_temp);
+      updateState();
     } 
     else if (val == 'b') {
       Serial.println("Current Variables:");
       Serial.print("active=");
       Serial.println(active);
       Serial.print("state=");
-      Serial.println(state);
+      Serial.print(state);
+      if (state == HEATER_ON)
+	  Serial.println(" (ON)");
+      else if (state == HEATER_OFF)
+	  Serial.println(" (OFF)");
+      else
+	  Serial.println(" (Unknown?)");
       Serial.print("temp=");
       Serial.println(temp);
       Serial.print("set_temp=");
       Serial.println(set_temp);
+      Serial.print("Hysteresis (H)=");
+      Serial.println(H);
       Serial.print("INTERVAL=");
       Serial.println(INTERVAL);
       Serial.print("elapsed=");

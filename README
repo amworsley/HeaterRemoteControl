@@ -6,3 +6,12 @@ subject to Arduino control as describe in this really neat project
 
   o Requires debian python python-serial packages
   o Compiling ino file under command line possible using arduino-core and Arduino.mk
+
+  o ino/ApplianceRemoteControlTemp/ApplianceRemoteControlTemp.ino - Arduino C/C++
+source for Arduino controller that toggles remote control on/off depending on the
+temperature it reads in on the Temperature sensor.
+
+  Compiling Arduino firmware
+You need to cd into the ino/ApplianceRemoteControlTemp directory and type make. This will generate
+a files in the build-cli subdirectory (including a .cpp file) and a .hex file. make upload will
+attempt to upload the firmware through the serial device defined in the makefile (/dev/ttyACM0 by defaault).
