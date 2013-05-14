@@ -65,7 +65,7 @@ unsigned long elapsed = 0; // time in milliseconds of last update
 
 #define BTN_REPEAT	3 /* no. of times to repeat button press for reliability */
 
-float H = .5; /* hysterias */
+float H = .2; /* hysterias */
 int active = OFF; /* heater control state */
 int state = HEATER_OFF;  // Heater state
 int new_state = state;
