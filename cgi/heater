@@ -48,7 +48,7 @@ if param.has_key('active') and param.has_key('state'):
     if param['state'] == '7':
 	print "<h2> Heater is ON </h2>"
     elif param['active'] == '1':
-	print "<h2> Controller is Active but Heater is OFF  </h2>"
+	print "<h2> Controller is Active but Heater is %s  </h2>" % ( "ON" if param['state'] == '7' else "OFF" )
     else:
 	print "<h2> Controller is Deactived and Heater is %s  </h2>" % ( "ON" if param['state'] == '7' else "OFF" )
 
