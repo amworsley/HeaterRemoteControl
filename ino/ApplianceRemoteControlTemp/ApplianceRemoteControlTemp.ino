@@ -32,6 +32,12 @@
  *   + = Increment the set temperature by H degrees
  *   - = Decrement the set temperature by H degrees
  * 
+ *   P = Increment the buttonPressTime by BTN_PRESS_DELTA
+ *   p = Decrement the buttonPressTime by BTN_PRESS_DELTA
+ *
+ *   R = Increment the btn_repeat by 1
+ *   r = Decrement the btn_repeat by 1
+ *
  *   Every INTERVAL seconds it evaluates the temperature and when active switches ON/OFF the heater
  *  based on whether the measured temperature is above / below the set temperatures. There is a
  *  hysteresis H around the set temperature that is allowed before the controller will allow the
@@ -43,7 +49,7 @@
  * Copyright 2012 Andrew Worsley <amworsley@gmail.com>
  */
 
-#define VER_STR "HeaterControll v1.0 14 June 2014"
+#define VER_STR "HeaterControl v1.0a 14 June 2014"
 // Use pins 5 through 12 as the digital outputs
 enum D_OUTPUTs {
  D_OUTPUT1 = 5,
@@ -55,6 +61,8 @@ enum D_OUTPUTs {
  D_OUTPUT7 = 11,
  D_OUTPUT8 = 12,
 };
+
+#define BTN_PRESS_DELTA 100
 
 #define DEBUG 0
 #define DFLT_PRESS_TIME 600
@@ -196,22 +204,54 @@ void loop()
 	  Serial.println(" (Unknown?)");
       Serial.println(VER_STR);
       Serial.print("temp=");
-      Serial.println(temp);
-      Serial.print("set_temp=");
-      Serial.println(set_temp);
-      Serial.print("Hysteresis (H)=");
+      Serial.print(temp);
+      Serial.print(" set_temp=");
+      Serial.print(set_temp);
+      Serial.print(" Hysteresis (H)=");
       Serial.println(H);
       Serial.print("INTERVAL=");
-      Serial.println(INTERVAL);
-      Serial.print("elapsed=");
-      Serial.println(elapsed);
-      Serial.print("time=");
+      Serial.print(INTERVAL);
+      Serial.print(" elapsed=");
+      Serial.print(elapsed);
+      Serial.print(" time=");
       Serial.println(time);
+      Serial.print("buttonPressTime=");
+      Serial.print(buttonPressTime);
+      Serial.print("btn_repeat=");
+      Serial.println(btn_repeat);
     } 
     else if (val >= '1' && val <= '8')
       RemoteControl(val);
     else if (val == 't' || val == 'T')
       RemoteTemperature();
+    else if (val == 'R') {
+      Serial.print("Incrementing btn_repeat: ");
+      btn_repeat++;
+      Serial.println(btn_repeat);
+    }
+    else if (val == 'r') {
+      if (btn_repeat > 1) {
+          Serial.println("Decrementing btn_repeat ");
+          btn_repeat--;
+      }
+      else
+          Serial.println("btn_repeat at minimum: ");
+      Serial.println(btn_repeat);
+    }
+    else if (val == 'P') {
+      Serial.print("Incrementing buttonPressTime: ");
+      buttonPressTime += BTN_PRESS_DELTA;
+      Serial.println(buttonPressTime);
+    }
+    else if (val == 'p') {
+      if (buttonPressTime > BTN_PRESS_DELTA) {
+          Serial.println("Decrementing buttonPressTime ");
+          buttonPressTime -= BTN_PRESS_DELTA;
+      }
+      else
+          Serial.println("buttonPressTime at minimum: ");
+      Serial.println(buttonPressTime);
+    }
     else {
       Serial.print(val);
       Serial.println(": Unknown Command ignored");
