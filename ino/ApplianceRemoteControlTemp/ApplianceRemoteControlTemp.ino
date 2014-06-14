@@ -43,27 +43,32 @@
  * Copyright 2012 Andrew Worsley <amworsley@gmail.com>
  */
 
+#define VER_STR "HeaterControll v1.0 14 June 2014"
 // Use pins 5 through 12 as the digital outputs
-int output1 = 5;
-int output2 = 6;
-int output3 = 7;
-int output4 = 8;
-int output5 = 9;
-int output6 = 10;
-int output7 = 11;
-int output8 = 12;
+enum D_OUTPUTs {
+ D_OUTPUT1 = 5,
+ D_OUTPUT2 = 6,
+ D_OUTPUT3 = 7,
+ D_OUTPUT4 = 8,
+ D_OUTPUT5 = 9,
+ D_OUTPUT6 = 10,
+ D_OUTPUT7 = 11,
+ D_OUTPUT8 = 12,
+};
 
 #define DEBUG 0
-int buttonPressTime = 600;   // Number of milliseconds to hold outputs on
+#define DFLT_PRESS_TIME 600
+int buttonPressTime = DFLT_PRESS_TIME;   // Number of milliseconds to hold outputs on
 unsigned int INTERVAL = 60*1000; // Number of milliseconds to wait between updating temperatures
 unsigned long elapsed = 0; // time in milliseconds of last update
 #define ON 1
 #define OFF 0
 
-#define HEATER_ON output3 /* pulse this to turn Heater On */
-#define HEATER_OFF output4 /* pulse this to turn Heater Off */
+#define HEATER_ON D_OUTPUT3 /* pulse this to turn Heater On */
+#define HEATER_OFF D_OUTPUT4 /* pulse this to turn Heater Off */
 
-#define BTN_REPEAT	3 /* no. of times to repeat button press for reliability */
+#define DFLT_BTN_REPEAT	3
+int btn_repeat	= DFLT_BTN_REPEAT; /* no. of times to repeat button press for reliability */
 
 float H = .2; /* hysterias */
 int active = OFF; /* heater control state */
@@ -105,24 +110,24 @@ void setup()
 #endif
 
   // Set up the pins as outputs
-  pinMode(output1, OUTPUT);
-  pinMode(output2, OUTPUT);
-  pinMode(output3, OUTPUT);
-  pinMode(output4, OUTPUT);
-  pinMode(output5, OUTPUT);
-  pinMode(output6, OUTPUT);
-  pinMode(output7, OUTPUT);
-  pinMode(output8, OUTPUT);
+  pinMode(D_OUTPUT1, OUTPUT);
+  pinMode(D_OUTPUT2, OUTPUT);
+  pinMode(D_OUTPUT3, OUTPUT);
+  pinMode(D_OUTPUT4, OUTPUT);
+  pinMode(D_OUTPUT5, OUTPUT);
+  pinMode(D_OUTPUT6, OUTPUT);
+  pinMode(D_OUTPUT7, OUTPUT);
+  pinMode(D_OUTPUT8, OUTPUT);
 
   // Make sure the outputs are all set LOW initially
-  digitalWrite(output1, LOW);
-  digitalWrite(output2, LOW);
-  digitalWrite(output3, LOW);
-  digitalWrite(output4, LOW);
-  digitalWrite(output5, LOW);
-  digitalWrite(output6, LOW);
-  digitalWrite(output7, LOW);
-  digitalWrite(output8, LOW);
+  digitalWrite(D_OUTPUT1, LOW);
+  digitalWrite(D_OUTPUT2, LOW);
+  digitalWrite(D_OUTPUT3, LOW);
+  digitalWrite(D_OUTPUT4, LOW);
+  digitalWrite(D_OUTPUT5, LOW);
+  digitalWrite(D_OUTPUT6, LOW);
+  digitalWrite(D_OUTPUT7, LOW);
+  digitalWrite(D_OUTPUT8, LOW);
 }
 
 /**
@@ -189,6 +194,7 @@ void loop()
 	  Serial.println(" (OFF)");
       else
 	  Serial.println(" (Unknown?)");
+      Serial.println(VER_STR);
       Serial.print("temp=");
       Serial.println(temp);
       Serial.print("set_temp=");
@@ -259,7 +265,7 @@ void
 pulse(byte output, int pressTime)
 {
     int cnt = 0;
-    while (cnt++ < BTN_REPEAT)
+    while (cnt++ < btn_repeat)
     	pressBtn(output, pressTime);
 }
 void
@@ -267,37 +273,38 @@ RemoteControl(byte val)
 {
   if(val == '1') {
     // Pulse the 1st button
-    pulse(output1, buttonPressTime);
+    pulse(D_OUTPUT1, buttonPressTime);
   } 
   else if(val == '2') {
     // Pulse the 2nd button
-    pulse(output2, buttonPressTime);
+    pulse(D_OUTPUT2, buttonPressTime);
   } 
   else if(val == '3') {
     // Pulse the 3rd button
-    pulse(output3, buttonPressTime);
+    pulse(D_OUTPUT3, buttonPressTime);
   } 
   else if(val == '4') {
     // Pulse the 4th button
-    pulse(output4, buttonPressTime);
+    pulse(D_OUTPUT4, buttonPressTime);
   } 
   else if(val == '5') {
     // Pulse the 5th button
-    pulse(output5, buttonPressTime);
+    pulse(D_OUTPUT5, buttonPressTime);
   } 
   else if(val == '6') {
     // Pulse the 6th button
-    pulse(output6, buttonPressTime);
+    pulse(D_OUTPUT6, buttonPressTime);
   } 
   else if(val == '7') {
     // Pulse the 7th button
-    pulse(output7, buttonPressTime);
+    pulse(D_OUTPUT7, buttonPressTime);
   } 
   else if(val == '8') {
     // Pulse the 8th button
-    pulse(output8, buttonPressTime);
+    pulse(D_OUTPUT8, buttonPressTime);
   }
 
 
 }
 
+    /* vim: set filetype=c : */

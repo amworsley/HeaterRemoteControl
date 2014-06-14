@@ -50,3 +50,6 @@ include /usr/share/arduino/Arduino.mk
 #   make raw_upload  - upload without first resetting
 #   make show_boards - list all the boards defined in boards.txt
 #
+
+tags: ApplianceRemoteControlTemp.ino
+        ctags --langmap=c:.c.ino $*
