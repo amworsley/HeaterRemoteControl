@@ -1,0 +1,11 @@
+#! /bin/sh 
+# Decrement button press time
+# Arduino input
+#AF=/dev/ttyACM0
+#ALF=/home/amw/remote-control.log
+CF=/etc/remote-control.cfg
+AF=$(awk -F = '/dfile/ { print $2; }' < $CF)
+ALF=$(awk -F = '/^logFile=/ { print $2; }' < $CF)
+echo -n "p" > $AF
+sleep .5
+tail -2 $ALF
