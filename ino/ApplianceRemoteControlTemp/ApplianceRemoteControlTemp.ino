@@ -217,7 +217,7 @@ void loop()
       Serial.println(time);
       Serial.print("buttonPressTime=");
       Serial.print(buttonPressTime);
-      Serial.print("btn_repeat=");
+      Serial.print(" btn_repeat=");
       Serial.println(btn_repeat);
     } 
     else if (val >= '1' && val <= '8')
@@ -231,11 +231,11 @@ void loop()
     }
     else if (val == 'r') {
       if (btn_repeat > 1) {
-          Serial.println("Decrementing btn_repeat ");
+          Serial.print("Decrementing btn_repeat: ");
           btn_repeat--;
       }
       else
-          Serial.println("btn_repeat at minimum: ");
+          Serial.print("btn_repeat at minimum: ");
       Serial.println(btn_repeat);
     }
     else if (val == 'P') {
@@ -245,11 +245,11 @@ void loop()
     }
     else if (val == 'p') {
       if (buttonPressTime > BTN_PRESS_DELTA) {
-          Serial.println("Decrementing buttonPressTime ");
+          Serial.print("Decrementing buttonPressTime: ");
           buttonPressTime -= BTN_PRESS_DELTA;
       }
       else
-          Serial.println("buttonPressTime at minimum: ");
+          Serial.print("buttonPressTime at minimum: ");
       Serial.println(buttonPressTime);
     }
     else {
