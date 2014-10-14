@@ -1,0 +1,24 @@
+Edit ApplianceRemoteControlTemp.ino
+
+The makefile will copy this file into build-cli and build it as per:
+
+echo '#include <Arduino.h>' > build-cli/ApplianceRemoteControlTemp.cpp
+cat  ApplianceRemoteControlTemp.ino >> build-cli/ApplianceRemoteControlTemp.cpp
+/usr/bin/avr-gcc -c -mmcu=atmega328p -DF_CPU=16000000L -DARDUINO=100 -I. -I/usr/share/arduino/hardware/arduino/cores/arduino
+-I/usr/share/arduino/hardware/arduino/variants/standard -I/usr/share/arduino/libraries/WInterrupts -I/home/amw/sketchbook/libraries/WInterrupts -g -Os
+-w -Wall -ffunction-sections -fdata-sections -std=gnu99 ApplianceRemoteControlTemp.c -o build-cli/ApplianceRemoteControlTemp.o
+
+
+  * Then build everything into a library build-cli/libcore.a 
+
+/usr/bin/avr-ar rcs build-cli/libcore.a  build-cli/WInterrupts.o  build-cli/wiring_analog.o  build-cli/wiring.o  build-cli/wiring_digital.o  build-cli/wiring_pulse.o  build-cli/wiring_shift.o  build-cli/CDC.o  build-cli/HardwareSerial.o  build-cli/HID.o  build-cli/IPAddress.o  build-cli/main.o  build-cli/new.o  build-cli/Print.o  build-cli/Stream.o  build-cli/Tone.o  build-cli/USBCore.o  build-cli/WMath.o  build-cli/WString.o    
+
+   * link it together as into a .hex file:
+
+/usr/bin/avr-gcc -mmcu=atmega328p -Wl,--gc-sections -Os -o build-cli/ApplianceRemoteControlTemp.elf build-cli/ApplianceRemoteControlTemp.o build-cli/ApplianceRemoteControlTemp.o build-cli/libcore.a  -lc -lm
+/usr/bin/avr-objcopy -O ihex -R .eeprom build-cli/ApplianceRemoteControlTemp.elf build-cli/ApplianceRemoteControlTemp.hex
+
+ 
+   * Upload it to ttyACM0 via :
+/usr/bin/avrdude -q -V -p atmega328p -C /etc/avrdude.conf -c arduino -b 115200 -P /dev/ttyACM0  \
+                        -U flash:w:build-cli/ApplianceRemoteControlTemp.hex:i
