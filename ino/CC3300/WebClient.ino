@@ -41,22 +41,20 @@ It might not work on all networks!
 Adafruit_CC3000 cc3000 = Adafruit_CC3000(ADAFRUIT_CC3000_CS, ADAFRUIT_CC3000_IRQ, ADAFRUIT_CC3000_VBAT,
                                          SPI_CLOCK_DIVIDER); // you can change this clock speed
 
+#include "private.h" // fetch following from file - don't put passwords in repository
 //#define WLAN_SSID       "myNetwork"           // cannot be longer than 32 characters!
+//#define WLAN_PASS       "myPassword"
 // Security can be WLAN_SEC_UNSEC, WLAN_SEC_WEP, WLAN_SEC_WPA or WLAN_SEC_WPA2
-#define WLAN_SECURITY   WLAN_SEC_WPA2
+//#define WLAN_SECURITY   WLAN_SEC_WPA2
 
-// Security can be WLAN_SEC_UNSEC, WLAN_SEC_WEP, WLAN_SEC_WPA or WLAN_SEC_WPA2
-#define WLAN_SECURITY   WLAN_SEC_WPA2
+// What page to grab!
+//#define WEBSITE      "www.adafruit.com"
+//#define WEBPAGE      "/testwifi/index.html"
 
 #define IDLE_TIMEOUT_MS  3000      // Amount of time to wait (in milliseconds) with no data 
                                    // received before closing the connection.  If you know the server
                                    // you're accessing is quick to respond, you can reduce this value.
 
-// What page to grab!
-//#define WEBSITE      "www.adafruit.com"
-//#define WEBPAGE      "/testwifi/index.html"
-#define WEBSITE      "azza.tqc.com.au"
-#define WEBPAGE      "/cgi-bin/heaterIsOn"
 
 bool displayConnectionDetails(void);
 void listSSIDResults(void);
