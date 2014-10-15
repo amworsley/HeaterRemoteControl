@@ -106,7 +106,8 @@ void setup(void)
     delay(1000);
   }
 
-  ip = 0;
+  //ip = 0;
+  ip = cc3000.IP2U32(10, 0, 0, 51); // hack to make it work
   // Try looking up the website's IP address
   Serial.print(WEBSITE); Serial.print(F(" -> "));
   while (ip == 0) {
