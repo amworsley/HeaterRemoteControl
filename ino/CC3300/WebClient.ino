@@ -68,13 +68,8 @@ void listSSIDResults(void);
 
 uint32_t ip;
 
-void setup(void)
+void startup(void)
 {
-  Serial.begin(115200);
-  Serial.println(F("Hello, CC3000!\n")); 
-
-  Serial.print("Free RAM: "); Serial.println(getFreeRam(), DEC);
-  
   /* Initialise the module */
   Serial.println(F("\nInitializing..."));
   if (!cc3000.begin())
@@ -121,10 +116,20 @@ void setup(void)
 
 }
 
+void setup(void)
+{
+  Serial.begin(115200);
+  Serial.println(F("Hello, CC3000!\n")); 
+
+  Serial.print("Free RAM: "); Serial.println(getFreeRam(), DEC);
+
+  startup();
+}
+ 
 /*
  * Do request
  */
-void do_request(void)
+int do_request(void)
 {
   
   Serial.println(F("- do_request() -"));
@@ -148,7 +153,7 @@ void do_request(void)
     www.println();
   } else {
     Serial.println(F("Connection failed"));    
-    return;
+    return 1;
   }
 
   Serial.println(F("-------------------------------------"));
@@ -164,6 +169,8 @@ void do_request(void)
   }
   www.close();
   Serial.println(F("-------------------------------------"));
+
+  return 0;
 }
   
 void shutdown(void)
@@ -179,7 +186,15 @@ void loop(void)
 {
  uint32_t i;
 
- do_request();
+ if (do_request()) {
+    Serial.println(F("Shutdown\n"));
+    delay(1000);
+    shutdown();
+    Serial.println(F("Try again\n"));
+    delay(1000);
+    startup();
+    return;
+ }
  for (i = 0; i < 60; i++)
      delay(1000);
 }
